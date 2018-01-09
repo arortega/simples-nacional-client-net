@@ -25,10 +25,8 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.1.0
 # Exemplo
 
 ```csharp
-using (var client = new SimplesNacionalClient("https://simplesnacional.aclti.com.br"))
-{
-    var lista = await client.ListarDiferencasAliquota("9999"); //Codigo TOM do município
-}
+var client = new SimplesNacionalClient("https://simplesnacional.aclti.com.br");
+var lista = await client.ListarDiferencasAliquota("9999"); //Codigo TOM do município
 ```
 
 Exemplos completos disponíveis [neste link](https://github.com/arortega/simples-nacional-client-net/tree/master/exemplos)

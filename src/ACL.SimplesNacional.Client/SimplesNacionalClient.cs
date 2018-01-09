@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace ACL.SimplesNacional.Client
 {
-    public class SimplesNacionalClient
+    public class SimplesNacionalClient : IDisposable
     {
         private readonly HttpClient client;
 
@@ -20,6 +20,11 @@ namespace ACL.SimplesNacional.Client
             {
                 BaseAddress = new Uri(url)
             };
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
 
         public async Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM)

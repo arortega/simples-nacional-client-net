@@ -18,10 +18,12 @@ namespace ConsoleApp
             Console.WriteLine(string.Empty);
             Console.WriteLine("Realizando consulta, aguarde...");
 
-            var client = new SimplesNacionalClient(url);
-            var lista = await client.ListarDiferencasAliquota(codigoTOM);
+            using (var client = new SimplesNacionalClient(url))
+            {
+                var lista = await client.ListarDiferencasAliquota(codigoTOM);
+                Console.WriteLine($"Api retornou {lista.Count()} registros");
+            }
 
-            Console.WriteLine($"Api retornou {lista.Count()} registros");
             Console.ReadKey();
         }
     }

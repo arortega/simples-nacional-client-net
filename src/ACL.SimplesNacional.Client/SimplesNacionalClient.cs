@@ -50,6 +50,14 @@ namespace ACL.SimplesNacional.Client
             return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/siga/diferenca-aliquota/{codigoTOM}"));
         }
 
+        public Task<IEnumerable<string>> ListarSublimites(string codigoTOM, int ano, int mes)
+        {
+            if (string.IsNullOrWhiteSpace(codigoTOM))
+                throw new ArgumentNullException(nameof(codigoTOM));
+
+            return httpClient.GetJson<IEnumerable<string>>(UriApi($"api/siga/sublimite/{codigoTOM}/{ano}/{mes}"));
+        }
+
         private Uri UriApi(string urlRelativa) => new Uri(baseUri, urlRelativa);
     }
 }

@@ -9,18 +9,18 @@ namespace ConsoleApp
     {
         static async Task Main()
         {
-            Console.WriteLine("Digite a URL da API do Simples Nacional:");
-            var url = Console.ReadLine();
+            Console.Write("ID do cliente: ");
+            var id = Console.ReadLine();
 
-            Console.WriteLine("Digite o código TOM do município que deseja consultar:");
-            var codigoTOM = Console.ReadLine();
+            Console.Write("Senha: ");
+            var senha = Console.ReadLine();
 
-            Console.WriteLine(string.Empty);
+            Console.WriteLine();
             Console.WriteLine("Realizando consulta, aguarde...");
 
-            using (var client = new SimplesNacionalClient(url))
+            using (var client = new SimplesNacionalClient(id, senha))
             {
-                var lista = await client.ListarDiferencasAliquota(codigoTOM);
+                var lista = await client.ListarDiferencasAliquota("3105");
                 Console.WriteLine($"Api retornou {lista.Count()} registros");
             }
 

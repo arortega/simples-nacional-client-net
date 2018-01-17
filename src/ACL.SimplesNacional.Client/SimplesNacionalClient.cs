@@ -1,45 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client.DiferencaAliquota;
-using Newtonsoft.Json;
 
 namespace ACL.SimplesNacional.Client
 {
     public class SimplesNacionalClient : IDisposable
     {
-        private readonly HttpClient client;
+        private readonly HttpClientOAuth httpClient;
+        private readonly Uri baseUri;
 
-        public SimplesNacionalClient(string url)
+        public SimplesNacionalClient(
+            string clienteId,
+            string clienteSenha,
+            string urlApi = "https://simplesnacional.aclti.com.br",
+            string urlAutenticacao = "https://auth.aclti.com.br"
+            )
         {
-            if (string.IsNullOrEmpty(url))
-                throw new ArgumentNullException(nameof(url));
+            if (string.IsNullOrEmpty(clienteId))
+                throw new ArgumentNullException(nameof(clienteId));
 
-            client = new HttpClient
-            {
-                BaseAddress = new Uri(url)
-            };
+            if (string.IsNullOrEmpty(clienteSenha))
+                throw new ArgumentNullException(nameof(clienteSenha));
+
+            if (string.IsNullOrEmpty(urlApi))
+                throw new ArgumentNullException(nameof(urlApi));
+
+            if (string.IsNullOrEmpty(urlAutenticacao))
+                throw new ArgumentNullException(nameof(urlAutenticacao));
+
+            httpClient = new HttpClientOAuth(
+                clienteId,
+                clienteSenha,
+                urlAutenticacao);
+
+            baseUri = new Uri(urlApi);
         }
 
         public void Dispose()
         {
-            client.Dispose();
+            httpClient.Dispose();
         }
 
-        public async Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM)
+        public Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM)
         {
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            //TODO: quando Simples Nacional novo estiver publicado, passar código TOM como parâmetro da consulta 
-            var response = await client.GetAsync("api/enquadramentos");
-            response.EnsureSuccessStatusCode();
-
-            var content = await response.Content.ReadAsStringAsync();
-            var lista = JsonConvert.DeserializeObject<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(content);
-
-            return lista;
+            return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/siga/diferenca-aliquota/{codigoTOM}"));
         }
+
+        private Uri UriApi(string urlRelativa) => new Uri(baseUri, urlRelativa);
     }
 }

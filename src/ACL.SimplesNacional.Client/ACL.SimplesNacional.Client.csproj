@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net452;netstandard1.4;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)' != 'Windows_NT'">netstandard1.4;netstandard2.0</TargetFrameworks>
     <PackageId>ACL.SimplesNacional.Client</PackageId>
     <PackageVersion>0.1.0</PackageVersion>
     <Authors>ACL TI</Authors>

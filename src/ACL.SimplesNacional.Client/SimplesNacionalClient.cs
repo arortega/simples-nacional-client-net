@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client.DiferencaAliquota;
+using ACL.SimplesNacional.Client.Eventos;
 
 namespace ACL.SimplesNacional.Client
 {
@@ -48,6 +49,14 @@ namespace ACL.SimplesNacional.Client
                 throw new ArgumentNullException(nameof(codigoTOM));
 
             return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/siga/diferenca-aliquota/{codigoTOM}"));
+        }
+
+        public Task<IEnumerable<Evento>> ListarEventos(string cnpjBase)
+        {
+            if (string.IsNullOrWhiteSpace(cnpjBase))
+                throw new ArgumentNullException(nameof(cnpjBase));
+
+            return httpClient.GetJson<IEnumerable<Evento>>(UriApi($"api/siga/eventos/{cnpjBase}"));
         }
 
         public Task<IEnumerable<string>> ListarSublimites(string codigoTOM, int ano, int mes)

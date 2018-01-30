@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client.DiferencaAliquota;
 using ACL.SimplesNacional.Client.Eventos;
+using ACL.SimplesNacional.Client.Sublimites;
 
 namespace ACL.SimplesNacional.Client
 {
@@ -48,7 +49,7 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/siga/diferenca-aliquota/{codigoTOM}"));
+            return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/analise/enquadramentos/diferencaaliquota/{codigoTOM}"));
         }
 
         public Task<IEnumerable<Evento>> ListarEventos(string cnpjBase)
@@ -56,15 +57,15 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(cnpjBase))
                 throw new ArgumentNullException(nameof(cnpjBase));
 
-            return httpClient.GetJson<IEnumerable<Evento>>(UriApi($"api/siga/eventos/{cnpjBase}"));
+            return httpClient.GetJson<IEnumerable<Evento>>(UriApi($"api/analise/eventos/{cnpjBase}"));
         }
 
-        public Task<IEnumerable<string>> ListarSublimites(string codigoTOM, int ano, int mes)
+        public Task<IEnumerable<AnaliseSublimite>> ListarSublimites(string codigoTOM, int ano, int mes)
         {
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJson<IEnumerable<string>>(UriApi($"api/siga/sublimite/{codigoTOM}/{ano}/{mes}"));
+            return httpClient.GetJson<IEnumerable<AnaliseSublimite>>(UriApi($"api/analise/sublimites/{codigoTOM}/{ano}/{mes}"));
         }
 
         private Uri UriApi(string urlRelativa) => new Uri(baseUri, urlRelativa);

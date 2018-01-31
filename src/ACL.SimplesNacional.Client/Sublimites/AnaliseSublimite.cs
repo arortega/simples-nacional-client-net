@@ -8,7 +8,7 @@ namespace ACL.SimplesNacional.Client.Sublimites
         public string Cnpj { get; set; }
         public int Mes { get; set; }
         public double Sublimite { get; set; }
-        public double RBA { get; set; }
-
+        public double RBAExterno { get; set; }
+        public double RBAInterno { get; set; }
     }
 }

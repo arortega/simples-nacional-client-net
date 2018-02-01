@@ -20,8 +20,11 @@ namespace ConsoleApp
 
             using (var client = new SimplesNacionalClient(id, senha))
             {
-                var lista = await client.ListarDiferencasAliquota("3105");
-                Console.WriteLine($"Api retornou {lista.Count()} registros");
+                var eventos = await client.ListarEventos("00000015");
+                Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
+
+                var sublimites = await client.ListarSublimites("5401", 2018, 1);
+                Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
             }
 
             Console.ReadKey();

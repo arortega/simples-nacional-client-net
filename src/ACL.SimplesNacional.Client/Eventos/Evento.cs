@@ -13,7 +13,7 @@ namespace ACL.SimplesNacional.Client.Eventos
         public string CnpjBase { get; set; }
 
         /// <summary>
-        /// Código do evento
+        /// Cï¿½digo do evento
         /// </summary>
         public int Codigo { get; set; }
 
@@ -23,9 +23,14 @@ namespace ACL.SimplesNacional.Client.Eventos
         public DateTime DataEfeito { get; set; }
 
         /// <summary>
-        /// Data da ocorrência
+        /// Data da ocorrï¿½ncia
         /// </summary>
         public DateTime DataOcorrencia { get; set; }
+
+        /// <summary>
+        /// Evento gerado pelo arquivo de MEI
+        /// </summary>
+        public bool MEI { get; set; }
 
         /// <summary>
         /// Natureza do evento
@@ -33,17 +38,17 @@ namespace ACL.SimplesNacional.Client.Eventos
         public NaturezaEvento Natureza { get; set; }
 
         /// <summary>
-        /// Número do processo administrativo
+        /// Nï¿½mero do processo administrativo
         /// </summary>
         public string NumeroProcessoAdministrativo { get; set; }
 
         /// <summary>
-        /// Número do processo judicial
+        /// Nï¿½mero do processo judicial
         /// </summary>
         public string NumeroProcessoJudicial { get; set; }
 
         /// <summary>
-        /// Observações do evento
+        /// Observaï¿½ï¿½es do evento
         /// </summary>
         public string Observacao { get; set; }
 

@@ -1,12 +1,12 @@
 namespace ACL.SimplesNacional.Client.Sublimites
 {
     /// <summary>
-    /// Retorno da API de análise de sublimites
+    /// Retorno da API de anÃ¡lise de sublimites
     /// </summary>
     public class AnaliseSublimite
     {
         /// <summary>
-        /// Ano da competência responsável pelo enquadramento
+        /// Ano da competÃªncia responsÃ¡vel pelo enquadramento
         /// </summary>
         public int Ano { get; set; }
 
@@ -16,7 +16,13 @@ namespace ACL.SimplesNacional.Client.Sublimites
         public string Cnpj { get; set; }
 
         /// <summary>
-        /// Mês da competência responsável pelo enquadramento
+        /// CompetÃªncia de inicio da cobranÃ§a via DAM
+        /// Esta competÃªncia e todas as posteriores deverÃ£o ser cobradas pelo municÃ­pio
+        /// </summary>
+        public int CompetenciaInicial { get; set; }
+
+        /// <summary>
+        /// MÃªs da competÃªncia responsÃ¡vel pelo enquadramento
         /// </summary>
         public int Mes { get; set; }
 
@@ -26,12 +32,12 @@ namespace ACL.SimplesNacional.Client.Sublimites
         public double Sublimite { get; set; }
 
         /// <summary>
-        /// Receita bruta do ano-calendário para o mercado externo
+        /// Receita bruta do ano-calendÃ¡rio para o mercado externo
         /// </summary>
         public double RBAExterno { get; set; }
 
         /// <summary>
-        /// Receita bruta do ano-calendário para o mercado interno
+        /// Receita bruta do ano-calendÃ¡rio para o mercado interno
         /// </summary>
         public double RBAInterno { get; set; }
     }

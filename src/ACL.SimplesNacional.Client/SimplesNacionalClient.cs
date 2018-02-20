@@ -84,15 +84,14 @@ namespace ACL.SimplesNacional.Client
         /// Listagem de contribuintes que ultrapassaram o sublimite estadual ou nacional
         /// </summary>
         /// <param name="codigoTOM">Código TOM do município</param>
-        /// <param name="ano">Ano da competência analisada</param>
-        /// <param name="mes">Mês da competência analisada</param>
-        /// <returns>Lista de contribuintes que devem ser cobrados via DAM na competência requisitada</returns>
-        public Task<IEnumerable<AnaliseSublimite>> ListarSublimites(string codigoTOM, int ano, int mes)
+        /// <param name="ano">Ano analisado</param>
+        /// <returns>Lista de contribuintes que devem ser cobrados via DAM no ano requisitado</returns>
+        public Task<IEnumerable<AnaliseSublimite>> ListarSublimites(string codigoTOM, int ano)
         {
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJson<IEnumerable<AnaliseSublimite>>(UriApi($"api/analise/sublimites/{codigoTOM}/{ano}/{mes}"));
+            return httpClient.GetJson<IEnumerable<AnaliseSublimite>>(UriApi($"api/analise/sublimites/{codigoTOM}/{ano}"));
         }
 
         /// <summary>

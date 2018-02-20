@@ -23,7 +23,7 @@ namespace ConsoleApp
                 var eventos = await client.ListarEventos("00000015");
                 Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
 
-                var sublimites = await client.ListarSublimites("5401", 2018, 1);
+                var sublimites = await client.ListarSublimites("5401", 2018);
                 Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
             }
 

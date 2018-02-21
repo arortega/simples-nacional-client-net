@@ -4,7 +4,7 @@ Este repositório contém o código fonte e exemplos de uso do client .NET para 
 
 ## Instalação
 ```sh
-$ dotnet add package ACL.SimplesNacional.Client --version 0.3.0
+$ dotnet add package ACL.SimplesNacional.Client --version 0.4.0
 ```
 
 ---
@@ -28,7 +28,7 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.3.0
 using (var client = new SimplesNacionalClient("Id", "Senha"))
 {
     var eventos = await client.ListarEventos("CNPJ base");
-    var sublimites = await client.ListarSublimites("Código TOM", 2018, 1);
+    var sublimites = await client.ListarSublimites("Código TOM", 2018);
 }
 ```
 

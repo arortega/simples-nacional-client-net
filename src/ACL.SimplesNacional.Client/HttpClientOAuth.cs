@@ -2,7 +2,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using IdentityModel.Client;
-using Newtonsoft.Json;
 
 namespace ACL.SimplesNacional.Client
 {
@@ -34,9 +33,7 @@ namespace ACL.SimplesNacional.Client
             var response = await client.GetAsync(uri);
             response.EnsureSuccessStatusCode();
 
-            var content = await response.Content.ReadAsStringAsync();
-            var json = JsonConvert.DeserializeObject<T>(content);
-
+            var json = await response.Content.ReadAsAsync<T>();
             return json;
         }
 

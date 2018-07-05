@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client.DiferencaAliquota;
 using ACL.SimplesNacional.Client.Eventos;
@@ -12,8 +13,7 @@ namespace ACL.SimplesNacional.Client
     /// </summary>
     public class SimplesNacionalClient : IDisposable
     {
-        private readonly HttpClientOAuth httpClient;
-        private readonly Uri baseUri;
+        private readonly HttpClient httpClient;
 
         /// <summary>
         /// Inicializa uma instância do client de consulta ao Simples Nacional
@@ -25,7 +25,7 @@ namespace ACL.SimplesNacional.Client
         public SimplesNacionalClient(
             string clienteId,
             string clienteSenha,
-            string urlApi = "https://simplesnacional.aclti.com.br",
+            string urlApi = "https://simplesnacional.aclti.com.br/api/analise/",
             string urlAutenticacao = "https://auth.aclti.com.br"
             )
         {
@@ -41,12 +41,25 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrEmpty(urlAutenticacao))
                 throw new ArgumentNullException(nameof(urlAutenticacao));
 
-            httpClient = new HttpClientOAuth(
+            httpClient = new HttpClient(new OAuthHttpHandler(
                 clienteId,
                 clienteSenha,
-                urlAutenticacao);
+                urlAutenticacao));
 
-            baseUri = new Uri(urlApi);
+            httpClient.BaseAddress = new Uri(urlApi);
+        }
+
+        /// <summary>
+        /// Inicializa uma instância do client de consulta ao Simples Nacional sem autenticação
+        /// </summary>
+        /// <param name="urlApi">URL da API do Simplse Nacional</param>
+        public SimplesNacionalClient(string urlApi)
+        {
+            if (string.IsNullOrEmpty(urlApi))
+                throw new ArgumentNullException(nameof(urlApi));
+
+            httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(urlApi);
         }
 
         public void Dispose()
@@ -64,7 +77,7 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJson<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>(UriApi($"api/analise/enquadramentos/diferencaaliquota/{codigoTOM}"));
+            return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>($"enquadramentos/diferencaaliquota/{codigoTOM}");
         }
 
         /// <summary>
@@ -77,7 +90,7 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(cnpjBase))
                 throw new ArgumentNullException(nameof(cnpjBase));
 
-            return httpClient.GetJson<IEnumerable<Evento>>(UriApi($"api/analise/eventos/{cnpjBase}"));
+            return httpClient.GetJsonAsync<IEnumerable<Evento>>($"eventos/{cnpjBase}");
         }
 
         /// <summary>
@@ -91,7 +104,7 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJson<IEnumerable<AnaliseSublimite>>(UriApi($"api/analise/sublimites/{codigoTOM}/{ano}"));
+            return httpClient.GetJsonAsync<IEnumerable<AnaliseSublimite>>($"sublimites/{codigoTOM}/{ano}");
         }
 
         /// <summary>
@@ -105,18 +118,11 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(cnpjBase))
                 throw new ArgumentNullException(nameof(cnpjBase));
 
-            var urlConsulta = $"api/analise/eventos/{cnpjBase}/situacao";
+            var urlConsulta = $"eventos/{cnpjBase}/situacao";
             if (data.HasValue)
                 urlConsulta += $"?data={data.Value:u}";
 
-            return httpClient.GetJson<SituacaoContribuinte>(UriApi(urlConsulta));
+            return httpClient.GetJsonAsync<SituacaoContribuinte>(urlConsulta);
         }
-
-        /// <summary>
-        /// Cria uma Uri completa a partir de um caminho relativo
-        /// </summary>
-        /// <param name="urlRelativa">Caminho relativo da URL</param>
-        /// <returns>Uri da API</returns>
-        private Uri UriApi(string urlRelativa) => new Uri(baseUri, urlRelativa);
     }
 }

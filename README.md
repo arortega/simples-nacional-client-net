@@ -4,7 +4,7 @@ Este repositório contém o código fonte e exemplos de uso do client .NET para 
 
 ## Instalação
 ```sh
-$ dotnet add package ACL.SimplesNacional.Client --version 0.4.0
+$ dotnet add package ACL.SimplesNacional.Client --version 0.5.0
 ```
 
 ---
@@ -19,6 +19,7 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.4.0
 ## Informações do contribuinte
 - [ ] Extrato da DAS-D
 - [X] Listagem de eventos do Simples Nacional (inclusão/exclusão)
+- [X] Situação SN/MEI
 
 ---
 
@@ -29,6 +30,7 @@ using (var client = new SimplesNacionalClient("Id", "Senha"))
 {
     var eventos = await client.ListarEventos("CNPJ base");
     var sublimites = await client.ListarSublimites("Código TOM", 2018);
+    var situacao = await client.ObterSituacaoContribuinte("CNPJ base");
 }
 ```
 

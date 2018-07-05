@@ -95,6 +95,24 @@ namespace ACL.SimplesNacional.Client
         }
 
         /// <summary>
+        /// Análise dos eventos do contribuinte para obter a situação cadastral em determinada data
+        /// </summary>
+        /// <param name="cnpjBase">CNPJ base do contribuinte</param>
+        /// <param name="data">Data de referência para consulta da situação</param>
+        /// <returns>Situação cadastral do contribuinte no Simples Nacional e MEI</returns>
+        public Task<SituacaoContribuinte> ObterSituacaoContribuinte(string cnpjBase, DateTime? data = null)
+        {
+            if (string.IsNullOrWhiteSpace(cnpjBase))
+                throw new ArgumentNullException(nameof(cnpjBase));
+
+            var urlConsulta = $"api/analise/eventos/{cnpjBase}/situacao";
+            if (data.HasValue)
+                urlConsulta += $"?data={data.Value:u}";
+
+            return httpClient.GetJson<SituacaoContribuinte>(UriApi(urlConsulta));
+        }
+
+        /// <summary>
         /// Cria uma Uri completa a partir de um caminho relativo
         /// </summary>
         /// <param name="urlRelativa">Caminho relativo da URL</param>

@@ -25,6 +25,9 @@ namespace ConsoleApp
 
                 var sublimites = await client.ListarSublimites("5401", 2018);
                 Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
+
+                var situacao = await client.ObterSituacaoContribuinte("01311378");
+                Console.WriteLine($"SN: {situacao.SimplesNacional?.Optante} / MEI: {situacao.MEI?.Optante}");
             }
 
             Console.ReadKey();

@@ -72,12 +72,13 @@ namespace ACL.SimplesNacional.Client
         /// </summary>
         /// <param name="codigoTOM">Código TOM do município</param>
         /// <returns>Lista de NFSes declaradas com alíquotas incorretas e potencial de arrecadação</returns>
-        public Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM)
+        public Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM, DateTime? dataCriacao = null)
         {
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>($"enquadramentos/diferencaaliquota/{codigoTOM}");
+            var queryDataCriacao = dataCriacao.HasValue ? $"?criacao={dataCriacao.Value:u}" : string.Empty;
+            return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>($"enquadramentos/diferencaaliquota/{codigoTOM}{queryDataCriacao}");
         }
 
         /// <summary>

@@ -20,6 +20,13 @@ namespace ConsoleApp
 
             using (var client = new SimplesNacionalClient(id, senha))
             {
+                var diferencas = await client.ListarDiferencasAliquota("3391");
+                Console.WriteLine($"Api de diferencas de aliquota retornou {diferencas.Count()} registros");
+
+                var data = DateTime.Now;
+                diferencas = await client.ListarDiferencasAliquota("3391", data);
+                Console.WriteLine($"Api de diferencas de aliquota com data de criação maior que {data} retornou {diferencas.Count()} registros");
+
                 var eventos = await client.ListarEventos("00000015");
                 Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
 

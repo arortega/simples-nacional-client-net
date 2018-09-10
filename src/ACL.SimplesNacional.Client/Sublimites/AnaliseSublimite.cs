@@ -32,6 +32,16 @@ namespace ACL.SimplesNacional.Client.Sublimites
         public decimal Sublimite { get; set; }
 
         /// <summary>
+        /// Receita bruta do ano-anterior para o mercado externo
+        /// </summary>
+        public decimal RBAAExterno { get; set; }
+
+        /// <summary>
+        /// Receita bruta do ano-anterior para o mercado interno
+        /// </summary>
+        public decimal RBAAInterno { get; set; }
+
+        /// <summary>
         /// Receita bruta do ano-calendário para o mercado externo
         /// </summary>
         public decimal RBAExterno { get; set; }

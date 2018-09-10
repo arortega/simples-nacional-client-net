@@ -29,16 +29,16 @@ namespace ACL.SimplesNacional.Client.Sublimites
         /// <summary>
         /// Valor do sublimite estadual ou nacional
         /// </summary>
-        public double Sublimite { get; set; }
+        public decimal Sublimite { get; set; }
 
         /// <summary>
         /// Receita bruta do ano-calendário para o mercado externo
         /// </summary>
-        public double RBAExterno { get; set; }
+        public decimal RBAExterno { get; set; }
 
         /// <summary>
         /// Receita bruta do ano-calendário para o mercado interno
         /// </summary>
-        public double RBAInterno { get; set; }
+        public decimal RBAInterno { get; set; }
     }
 }

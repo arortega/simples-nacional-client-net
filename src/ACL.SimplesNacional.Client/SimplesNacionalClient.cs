@@ -77,7 +77,7 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            var queryDataCriacao = dataCriacao.HasValue ? $"?criacao={dataCriacao.Value:u}" : string.Empty;
+            var queryDataCriacao = dataCriacao.HasValue ? $"?criacao={dataCriacao.Value:o}" : string.Empty;
             return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>($"enquadramentos/diferencaaliquota/{codigoTOM}{queryDataCriacao}");
         }
 
@@ -121,7 +121,7 @@ namespace ACL.SimplesNacional.Client
 
             var urlConsulta = $"eventos/{cnpjBase}/situacao";
             if (data.HasValue)
-                urlConsulta += $"?data={data.Value:u}";
+                urlConsulta += $"?data={data.Value:o}";
 
             return httpClient.GetJsonAsync<SituacaoContribuinte>(urlConsulta);
         }

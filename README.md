@@ -4,7 +4,7 @@ Este repositório contém o código fonte e exemplos de uso do client .NET para 
 
 ## Instalação
 ```sh
-$ dotnet add package ACL.SimplesNacional.Client --version 0.6.1
+$ dotnet add package ACL.SimplesNacional.Client --version 0.7.0
 ```
 
 ---
@@ -13,7 +13,7 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.6.1
 
 ## Análises com potencial de cobrança
 - [X] Listagem de contribuintes que ultrapassaram sublimite estadual/nacional
-- [X] Listagem de diferenças de alíquotas em NFS-es com imposto retido
+- [X] Listagem de divergências com seus respectivos valores
 
 
 ## Informações do contribuinte
@@ -28,6 +28,13 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.6.1
 ```csharp
 using (var client = new SimplesNacionalClient("Id", "Senha"))
 {
+    var baseCalculoProprio = await client.ListarDivergencias<ValoresDiferencaBaseCalculoProprio>(
+        codigoTOM: "8531",
+        ano: 2017,
+        mes: 2,
+        dataCriacao: new DateTime(2018, 10, 10, 13, 40, 0, DateTimeKind.Utc)
+        );
+
     var eventos = await client.ListarEventos("CNPJ base");
     var sublimites = await client.ListarSublimites("Código TOM", 2018);
     var situacao = await client.ObterSituacaoContribuinte("CNPJ base");

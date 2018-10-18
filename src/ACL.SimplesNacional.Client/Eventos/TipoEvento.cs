@@ -1,4 +1,4 @@
-namespace ACL.SimplesNacional.Client.Eventos
+namespace ACL.SimplesNacional.Client
 {
     public enum TipoEvento
     {

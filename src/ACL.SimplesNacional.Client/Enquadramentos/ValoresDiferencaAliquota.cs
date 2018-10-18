@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace ACL.SimplesNacional.Client.DiferencaAliquota
+namespace ACL.SimplesNacional.Client
 {
     /// <summary>
     /// Informações da análise de diferença de alíquota
     /// </summary>
-    public class ValoresDiferencaAliquota
+    public class ValoresDiferencaAliquota : IValoresEnquadramento
     {
         /// <summary>
         /// Alíquota calculada de acordo com a receita declarada

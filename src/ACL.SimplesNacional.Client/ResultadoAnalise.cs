@@ -1,4 +1,6 @@
-﻿namespace ACL.SimplesNacional.Client
+﻿using System;
+
+namespace ACL.SimplesNacional.Client
 {
     /// <summary>
     /// Resultado da análise de enquadramento
@@ -15,6 +17,11 @@
         /// CNPJ do contribuinte
         /// </summary>
         public string Cnpj { get; set; }
+
+        /// <summary>
+        /// Data de criação da divergência
+        /// </summary>
+        public DateTime DataCriacao { get; set; }
 
         /// <summary>
         /// Mês da competência analisada

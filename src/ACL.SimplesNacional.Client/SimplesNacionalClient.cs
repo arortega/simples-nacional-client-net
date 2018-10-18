@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ACL.SimplesNacional.Client.DiferencaAliquota;
-using ACL.SimplesNacional.Client.Eventos;
-using ACL.SimplesNacional.Client.Sublimites;
 
 namespace ACL.SimplesNacional.Client
 {
@@ -44,9 +41,10 @@ namespace ACL.SimplesNacional.Client
             httpClient = new HttpClient(new OAuthHttpHandler(
                 clienteId,
                 clienteSenha,
-                urlAutenticacao));
-
-            httpClient.BaseAddress = new Uri(urlApi);
+                urlAutenticacao))
+            {
+                BaseAddress = new Uri(urlApi)
+            };
         }
 
         /// <summary>
@@ -58,8 +56,10 @@ namespace ACL.SimplesNacional.Client
             if (string.IsNullOrEmpty(urlApi))
                 throw new ArgumentNullException(nameof(urlApi));
 
-            httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(urlApi);
+            httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(urlApi)
+            };
         }
 
         public void Dispose()
@@ -71,14 +71,20 @@ namespace ACL.SimplesNacional.Client
         /// Análise de diferenças de alíquotas declaradas em NFSes
         /// </summary>
         /// <param name="codigoTOM">Código TOM do município</param>
+        /// <param name="dataCriacao">Data de criação da divergência</param>
+        /// <param name="ano">Ano de competência do enquadramento</param>
+        /// <param name="mes">Mês de competência do enquadramento</param>
         /// <returns>Lista de NFSes declaradas com alíquotas incorretas e potencial de arrecadação</returns>
-        public Task<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>> ListarDiferencasAliquota(string codigoTOM, DateTime? dataCriacao = null)
+        public Task<IEnumerable<ResultadoAnalise<T>>> ListarDivergencias<T>(string codigoTOM,
+            DateTime? dataCriacao = null, int? ano = null, int? mes = null)
+            where T : IValoresEnquadramento
         {
             if (string.IsNullOrWhiteSpace(codigoTOM))
                 throw new ArgumentNullException(nameof(codigoTOM));
 
-            var queryDataCriacao = dataCriacao.HasValue ? $"?criacao={dataCriacao.Value:o}" : string.Empty;
-            return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<ValoresDiferencaAliquota>>>($"enquadramentos/diferencaaliquota/{codigoTOM}{queryDataCriacao}");
+            var codigoEnquadramento = CodigoEnquadramento<T>();
+            return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<T>>>(
+                $"enquadramentos/{codigoEnquadramento }/{codigoTOM}?criacao={dataCriacao:o}&ano={ano}&mes={mes}");
         }
 
         /// <summary>
@@ -124,6 +130,31 @@ namespace ACL.SimplesNacional.Client
                 urlConsulta += $"?data={data.Value:o}";
 
             return httpClient.GetJsonAsync<SituacaoContribuinte>(urlConsulta);
+        }
+
+        private static readonly Lazy<Dictionary<Type, string>> _mapeamentoValoresEnquadramentos = new Lazy<Dictionary<Type, string>>(() =>
+            new Dictionary<Type, string>
+            {
+                { typeof(ValoresDiferencaBaseCalculoProprio), "diferencabasecalculoproprio" },
+                { typeof(ValoresDiferencaBaseCalculoRetido), "diferencabasecalculoretido" },
+                { typeof(ValoresSemDeclaracao), "semdeclaracao" },
+                { typeof(ValoresPagamentoNaoLocalizado), "pagamentonaolocalizado" },
+                { typeof(ValoresSemAtividadeContabilidade), "sematividadecontabilidade" },
+                { typeof(ValoresIssDeclaradoMenorQueEstimativa), "issdeclaradomenorqueestimativa" },
+                { typeof(ValoresNaoEstimado), "naoestimado" },
+                { typeof(ValoresSemMovimento), "semmovimento" },
+                { typeof(ValoresSemNFSe), "semnfse" },
+                { typeof(ValoresDiferencaAliquota), "diferencaaliquota" }
+            });
+
+        /// <summary>
+        /// Código do enquadramento segundo seu tipo de valor
+        /// </summary>
+        /// <typeparam name="T">Tipo do valor do enquadramento</typeparam>
+        /// <returns>Código do enquadramento</returns>
+        private static string CodigoEnquadramento<T>() where T : IValoresEnquadramento
+        {
+            return _mapeamentoValoresEnquadramentos.Value[typeof(T)];
         }
     }
 }

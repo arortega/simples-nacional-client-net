@@ -1,4 +1,4 @@
-namespace ACL.SimplesNacional.Client.Sublimites
+namespace ACL.SimplesNacional.Client
 {
     /// <summary>
     /// Retorno da API de análise de sublimites

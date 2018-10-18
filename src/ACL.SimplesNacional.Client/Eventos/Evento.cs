@@ -1,6 +1,6 @@
 using System;
 
-namespace ACL.SimplesNacional.Client.Eventos
+namespace ACL.SimplesNacional.Client
 {
     /// <summary>
     /// Retorno da API de consulta de eventos

@@ -1,4 +1,4 @@
-﻿namespace ACL.SimplesNacional.Client.DiferencaAliquota
+﻿namespace ACL.SimplesNacional.Client
 {
     /// <summary>
     /// Informações sobre NFSes enquadradas por diferença de alíquota

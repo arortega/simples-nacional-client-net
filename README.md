@@ -4,7 +4,7 @@ Este repositório contém o código fonte e exemplos de uso do client .NET para 
 
 ## Instalação
 ```sh
-$ dotnet add package ACL.SimplesNacional.Client --version 0.7.0
+$ dotnet add package ACL.SimplesNacional.Client --version 0.7.1
 ```
 
 ---

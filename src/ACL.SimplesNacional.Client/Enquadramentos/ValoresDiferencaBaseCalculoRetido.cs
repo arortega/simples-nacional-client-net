@@ -16,10 +16,5 @@
         /// Valor do somatório de bases de cálculos das NFSes para a competência
         /// </summary>
         public decimal BaseCalculoNFSe { get; set; }
-
-        /// <summary>
-        /// Número de NFSes emitidas na competência
-        /// </summary>
-        public int NumeroNotasEmitidas { get; set; }
     }
 }

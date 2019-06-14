@@ -21,7 +21,6 @@ namespace ConsoleApp
             using (var client = new SimplesNacionalClient(id, senha))
             {
                 var baseCalculoProprio = await client.ListarDivergencias<ValoresDiferencaBaseCalculoProprio>(
-                    codigoTOM: "8531",
                     ano: 2017,
                     mes: 2,
                     dataCriacao: new DateTime(2018, 10, 10, 13, 40, 0, DateTimeKind.Utc)

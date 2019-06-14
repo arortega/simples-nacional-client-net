@@ -70,21 +70,16 @@ namespace ACL.SimplesNacional.Client
         /// <summary>
         /// Análise de diferenças de alíquotas declaradas em NFSes
         /// </summary>
-        /// <param name="codigoTOM">Código TOM do município</param>
         /// <param name="dataCriacao">Data de criação da divergência</param>
         /// <param name="ano">Ano de competência do enquadramento</param>
         /// <param name="mes">Mês de competência do enquadramento</param>
         /// <returns>Lista de NFSes declaradas com alíquotas incorretas e potencial de arrecadação</returns>
-        public Task<IEnumerable<ResultadoAnalise<T>>> ListarDivergencias<T>(string codigoTOM,
-            DateTime? dataCriacao = null, int? ano = null, int? mes = null)
+        public Task<IEnumerable<ResultadoAnalise<T>>> ListarDivergencias<T>(DateTime? dataCriacao = null, int? ano = null, int? mes = null)
             where T : IValoresEnquadramento
         {
-            if (string.IsNullOrWhiteSpace(codigoTOM))
-                throw new ArgumentNullException(nameof(codigoTOM));
-
             var codigoEnquadramento = CodigoEnquadramento<T>();
             return httpClient.GetJsonAsync<IEnumerable<ResultadoAnalise<T>>>(
-                $"enquadramentos/{codigoEnquadramento }/{codigoTOM}?criacao={dataCriacao:o}&ano={ano}&mes={mes}");
+                $"enquadramentos?tipo={codigoEnquadramento}&criacao={dataCriacao:o}&ano={ano}&mes={mes}");
         }
 
         /// <summary>

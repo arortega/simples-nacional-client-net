@@ -101,12 +101,9 @@ namespace ACL.SimplesNacional.Client
         /// <param name="codigoTOM">Código TOM do município</param>
         /// <param name="ano">Ano analisado</param>
         /// <returns>Lista de contribuintes que devem ser cobrados via DAM no ano requisitado</returns>
-        public Task<IEnumerable<AnaliseSublimite>> ListarSublimites(string codigoTOM, int ano)
+        public Task<IEnumerable<AnaliseSublimite>> ListarSublimites(int ano)
         {
-            if (string.IsNullOrWhiteSpace(codigoTOM))
-                throw new ArgumentNullException(nameof(codigoTOM));
-
-            return httpClient.GetJsonAsync<IEnumerable<AnaliseSublimite>>($"sublimites/{codigoTOM}/{ano}");
+            return httpClient.GetJsonAsync<IEnumerable<AnaliseSublimite>>($"sublimites/{ano}");
         }
 
         /// <summary>

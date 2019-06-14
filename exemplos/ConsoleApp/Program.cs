@@ -31,7 +31,7 @@ namespace ConsoleApp
                 var eventos = await client.ListarEventos("00000015");
                 Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
 
-                var sublimites = await client.ListarSublimites("8531", 2018);
+                var sublimites = await client.ListarSublimites(2018);
                 Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
 
                 var situacao = await client.ObterSituacaoContribuinte("01311378");

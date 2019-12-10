@@ -20,19 +20,10 @@ namespace ConsoleApp
 
             using (var client = new SimplesNacionalClient(id, senha))
             {
-                var baseCalculoProprio = await client.ListarDivergencias<ValoresDiferencaBaseCalculoProprio>(
-                    codigoTOM: "8531",
-                    ano: 2017,
-                    mes: 2,
-                    dataCriacao: new DateTime(2018, 10, 10, 13, 40, 0, DateTimeKind.Utc)
-                    );
-
-                Console.WriteLine($"Api de divergências retornou {baseCalculoProprio.Count()} registros");
-
                 var eventos = await client.ListarEventos("00000015");
                 Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
 
-                var sublimites = await client.ListarSublimites("8531", 2018);
+                var sublimites = await client.ListarSublimites(2019);
                 Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
 
                 var situacao = await client.ObterSituacaoContribuinte("01311378");

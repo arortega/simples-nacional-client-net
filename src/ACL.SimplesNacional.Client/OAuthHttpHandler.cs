@@ -1,4 +1,7 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,21 +9,54 @@ using IdentityModel.Client;
 
 namespace ACL.SimplesNacional.Client
 {
-    internal class OAuthHttpHandler : DelegatingHandler
+    public class OAuthHttpHandler : DelegatingHandler
     {
         private readonly string _clienteId;
         private readonly string _clienteSenha;
+        private readonly string _escopo = "sn";
         private readonly string _urlAutenticacao;
+        private readonly string _loginUsuario;
+        private readonly string _senhaUsuario;
+        private readonly IDictionary<string, string> _claims;
 
-        private string _accessToken;
+        private Token _accessToken;
 
-        public OAuthHttpHandler(string clienteId, string clienteSenha, string urlAutenticacao)
+        public OAuthHttpHandler(
+            string urlAutenticacao,
+            string clientId,
+            string clientSenha)
         {
-            _clienteId = clienteId;
-            _clienteSenha = clienteSenha;
             _urlAutenticacao = urlAutenticacao;
+            _clienteId = clientId;
+            _clienteSenha = clientSenha;
 
             InnerHandler = new HttpClientHandler();
+        }
+
+        public OAuthHttpHandler(
+            string urlAutenticacao,
+            string clientId,
+            string clientSenha,
+            IDictionary<string, string> claims,
+            string usuario = null,
+            string senha = "123456") : this(urlAutenticacao, clientId, clientSenha)
+        {
+            _urlAutenticacao = urlAutenticacao;
+            _clienteId = clientId;
+            _clienteSenha = clientSenha;
+            _loginUsuario = usuario;
+            _senhaUsuario = senha;
+            _claims = claims;
+
+            InnerHandler = new HttpClientHandler();
+        }
+
+        public async Task<Token> ObterAcessTokenAsync()
+        {
+            if (_accessToken == null)
+                _accessToken = await RequisitarToken();
+
+            return _accessToken;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -28,32 +64,71 @@ namespace ACL.SimplesNacional.Client
             if (request.Headers.Authorization == null)
             {
                 if (_accessToken == null)
-                    _accessToken = await RequisitarToken(cancellationToken);
+                    _accessToken = await RequisitarToken();
 
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _accessToken.Access);
             }
 
             return await base.SendAsync(request, cancellationToken);
         }
 
-        private async Task<string> RequisitarToken(CancellationToken cancellationToken)
+        private async Task<Token> RequisitarToken()
         {
-            DiscoveryResponse disco;
-            using (var discoClient = new DiscoveryClient(_urlAutenticacao))
+            using (var client = new HttpClient())
             {
-                disco = await discoClient.GetAsync(cancellationToken);
+                var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                {
+                    Address = _urlAutenticacao,
+                    Policy = new DiscoveryPolicy
+                    {
+                        RequireHttps = _urlAutenticacao.ToLower().StartsWith("https")
+                    }
+                });
+
                 if (disco.IsError)
                     throw disco.Exception;
-            }
 
-            using (var tokenClient = new TokenClient(disco.TokenEndpoint, _clienteId, _clienteSenha))
-            {
-                var response = await tokenClient.RequestClientCredentialsAsync(
-                    scope: "sn",
-                    cancellationToken: cancellationToken
-                    );
+                if (!string.IsNullOrEmpty(_loginUsuario) && _claims != null)
+                {
+                    var responseToken = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
+                    {
+                        Address = disco.TokenEndpoint,
 
-                return response.AccessToken;
+                        ClientId = _clienteId,
+                        ClientSecret = _clienteSenha,
+                        Scope = _escopo,
+
+                        UserName = _loginUsuario,
+                        Password = _senhaUsuario,
+                        Parameters = _claims
+                    });
+
+                    if (responseToken.IsError)
+                        throw new UnauthorizedAccessException();
+
+                    var handler = new JwtSecurityTokenHandler();
+                    var securityToken = handler.ReadToken(responseToken.AccessToken) as JwtSecurityToken;
+
+                    return new Token
+                    {
+                        Access = responseToken.AccessToken,
+                        Claims = securityToken.Payload.SerializeToJson()
+                    };
+                }
+
+                var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+                {
+                    Address = disco.TokenEndpoint,
+
+                    ClientId = _clienteId,
+                    ClientSecret = _clienteSenha,
+                    Scope = _escopo,
+                });
+
+                return new Token
+                {
+                    Access = response.AccessToken
+                };
             }
         }
     }

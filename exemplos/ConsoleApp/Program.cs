@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client;
 
@@ -9,28 +8,16 @@ namespace ConsoleApp
     {
         static async Task Main()
         {
-            Console.Write("ID do cliente: ");
-            var id = Console.ReadLine();
-
-            Console.Write("Senha: ");
-            var senha = Console.ReadLine();
-
             Console.WriteLine();
             Console.WriteLine("Realizando consulta, aguarde...");
 
-            using (var client = new SimplesNacionalClient(id, senha))
+            using var client = new SimplesNacionalClient("https://auth.aclti.com.br", "webiss5_5915", "KacU5707*k");
+            var enquadramentos = await client.ObterEnquadramentos("36463545000181");
+
+            foreach (var enquadramento in enquadramentos)
             {
-                var eventos = await client.ListarEventos("00000015");
-                Console.WriteLine($"Api de eventos retornou {eventos.Count()} registros");
-
-                var sublimites = await client.ListarSublimites(2019);
-                Console.WriteLine($"Api de sublimites retornou {sublimites.Count()} registros");
-
-                var situacao = await client.ObterSituacaoContribuinte("01311378");
-                Console.WriteLine($"SN: {situacao.SimplesNacional?.Optante} / MEI: {situacao.MEI?.Optante}");
+                Console.WriteLine($"Ano: {enquadramento.Ano}/Mês: {enquadramento.Mes} - Tipo: {enquadramento.Tipo} - Status: {enquadramento.Status} - Divergente: {enquadramento.Divergente}");
             }
-
-            Console.ReadKey();
         }
     }
 }

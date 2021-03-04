@@ -1,0 +1,24 @@
+
+@section head {
+    <link href="https://simplesnacional.aclti.com.br/static/css/bundle.fonts.css?versao=@(ViewData["Versao"])" rel="stylesheet" />
+    <link href="https://simplesnacional.aclti.com.br/static/css/bundle.styles.css?versao=@(ViewData["Versao"])" rel="stylesheet" />
+}
+@section scripts {
+    <script>
+        sessionStorage.setItem('authToken', '@Html.Raw(ViewData["accessToken"])');
+        sessionStorage.setItem('authClaims', '@Html.Raw(ViewData["claims"])');
+
+        window.__SN_URL_PREFIX__ = '/SimplesNacional';
+        window.__ANALISE_API_URL__ = '@ViewData["ApiAnalise"]';
+        window.__FISCALIZACAO_API_URL__ = '@ViewData["ApiFiscalizacao"]';
+        window.__DTE_API_URL__ = '@ViewData["ApiDTE"]';
+        window.__IMPORTACAO_API_URL__ = '@ViewData["ApiImportacaoGerencial"]';
+    </script>
+    <script src="https://simplesnacional.aclti.com.br/static/js/sn.bundle.js?versao=@(ViewData["Versao"])"></script>
+}
+
+<div class="acl">
+    <div class="container-fluid">
+        <div id="root"></div>
+    </div>
+</div>

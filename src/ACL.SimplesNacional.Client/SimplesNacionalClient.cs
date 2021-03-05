@@ -30,7 +30,7 @@ namespace ACL.SimplesNacional.Client
                 return oauth.ObterAcessTokenAsync();
             }
         }
-
+    
         public async Task<IEnumerable<SituacaoFical>> ObterSituacoesFiscais(IEnumerable<string> cnpjs)
         {
             var resultado = new List<SituacaoFical>();

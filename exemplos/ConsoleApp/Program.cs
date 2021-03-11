@@ -11,7 +11,7 @@ namespace ConsoleApp
             Console.WriteLine();
             Console.WriteLine("Realizando consulta, aguarde...");
 
-            using var client = new SimplesNacionalClient("https://auth.aclti.com.br", "webiss5_5915", "KacU5707*k");
+            using var client = new SimplesNacionalClient("https://auth.aclti.com.br", "demo_client", "demoC@123#!");
             var enquadramentos = await client.ObterEnquadramentos("36463545000181");
 
             foreach (var enquadramento in enquadramentos)

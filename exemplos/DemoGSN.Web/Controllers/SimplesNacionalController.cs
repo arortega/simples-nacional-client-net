@@ -16,7 +16,7 @@ namespace DemoGSN.Web.Controllers
                 { "matricula" , "123456"},
             };
 
-            var token = await new SimplesNacionalClient("https://auth.aclti.com.br/", "webiss5_5915", "KacU5707*k").ObterUserToken("11111111111", "senha", claims);
+            var token = await new SimplesNacionalClient("https://auth.aclti.com.br/", "demo_client", "demoC@123#!").ObterUserToken("11111111111", "senha", claims);
 
             ViewData.Add("accessToken", token.Access);
             ViewData.Add("claims", token.Claims);

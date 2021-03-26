@@ -12,11 +12,12 @@ namespace DemoGSN.Web.Controllers
             var claims = new Dictionary<string, string>
             {
                 { "role" , "sn-contrib" },
-                { "name" , "Usuário Demonstração" },
+                { "name" , "Cecília Silva" },
                 { "matricula" , "123456"},
+                { "cnpjs", "32577504000165"}
             };
 
-            var token = await new SimplesNacionalClient("https://auth.aclti.com.br/", "demo_client", "demoC@123#!").ObterUserToken("11111111111", "senha", claims);
+            var token = await new SimplesNacionalClient("https://auth.aclti.com.br/", "demo_client", "demoC@123#!").ObterUserToken("32577504000165", "senha", claims);
 
             ViewData.Add("accessToken", token.Access);
             ViewData.Add("claims", token.Claims);

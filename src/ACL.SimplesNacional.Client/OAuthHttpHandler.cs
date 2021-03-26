@@ -14,7 +14,7 @@ namespace ACL.SimplesNacional.Client
         private readonly string _clienteId;
         private readonly string _clienteSenha;
         private readonly string _escopo = "sn dec";
-        private readonly string _urlAutenticacao;
+        private readonly string _urlAutenticacao = "https://auth.aclti.com.br/";
         private readonly string _loginUsuario;
         private readonly string _senhaUsuario;
         private readonly IDictionary<string, string> _claims;
@@ -22,11 +22,9 @@ namespace ACL.SimplesNacional.Client
         private Token _accessToken;
 
         public OAuthHttpHandler(
-            string urlAutenticacao,
             string clientId,
             string clientSenha)
         {
-            _urlAutenticacao = urlAutenticacao;
             _clienteId = clientId;
             _clienteSenha = clientSenha;
 
@@ -34,14 +32,12 @@ namespace ACL.SimplesNacional.Client
         }
 
         public OAuthHttpHandler(
-            string urlAutenticacao,
             string clientId,
             string clientSenha,
             IDictionary<string, string> claims,
             string usuario = null,
-            string senha = "123456") : this(urlAutenticacao, clientId, clientSenha)
+            string senha = "123456") : this(clientId, clientSenha)
         {
-            _urlAutenticacao = urlAutenticacao;
             _clienteId = clientId;
             _clienteSenha = clientSenha;
             _loginUsuario = usuario;

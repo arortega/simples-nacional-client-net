@@ -17,7 +17,7 @@ namespace DemoGSN.Web.Controllers
                 { "cnpjs", "32577504000165"}
             };
 
-            var token = await new SimplesNacionalClient("https://auth.aclti.com.br/", "demo_client", "demoC@123#!").ObterUserToken("32577504000165", "senha", claims);
+            var token = await new OAuthHttpHandler("demo_client", "demoC@123#!", claims, "32577504000165").ObterAcessTokenAsync();
 
             ViewData.Add("accessToken", token.Access);
             ViewData.Add("claims", token.Claims);

@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ACL.SimplesNacional.Client" Version="0.9.5" />
+    <PackageReference Include="ACL.SimplesNacional.Client" Version="0.9.6" />
   </ItemGroup>
 
 </Project>

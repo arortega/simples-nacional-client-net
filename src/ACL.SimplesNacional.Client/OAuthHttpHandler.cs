@@ -70,62 +70,60 @@ namespace ACL.SimplesNacional.Client
 
         private async Task<Token> RequisitarToken()
         {
-            using (var client = new HttpClient())
+            using var client = new HttpClient();
+            var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
             {
-                var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+                Address = _urlAutenticacao,
+                Policy = new DiscoveryPolicy
                 {
-                    Address = _urlAutenticacao,
-                    Policy = new DiscoveryPolicy
-                    {
-                        RequireHttps = _urlAutenticacao.ToLower().StartsWith("https")
-                    }
-                });
-
-                if (disco.IsError)
-                    throw disco.Exception;
-
-                if (!string.IsNullOrEmpty(_loginUsuario) && _claims != null)
-                {
-                    var responseToken = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
-                    {
-                        Address = disco.TokenEndpoint,
-
-                        ClientId = _clienteId,
-                        ClientSecret = _clienteSenha,
-                        Scope = _escopo,
-
-                        UserName = _loginUsuario,
-                        Password = _senhaUsuario,
-                        Parameters = _claims
-                    });
-
-                    if (responseToken.IsError)
-                        throw new UnauthorizedAccessException();
-
-                    var handler = new JwtSecurityTokenHandler();
-                    var securityToken = handler.ReadToken(responseToken.AccessToken) as JwtSecurityToken;
-
-                    return new Token
-                    {
-                        Access = responseToken.AccessToken,
-                        Claims = securityToken.Payload.SerializeToJson()
-                    };
+                    RequireHttps = _urlAutenticacao.ToLower().StartsWith("https")
                 }
+            });
 
-                var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            if (disco.IsError)
+                throw disco.Exception;
+
+            if (!string.IsNullOrEmpty(_loginUsuario) && _claims != null)
+            {
+                var responseToken = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
                 {
                     Address = disco.TokenEndpoint,
 
                     ClientId = _clienteId,
                     ClientSecret = _clienteSenha,
                     Scope = _escopo,
+
+                    UserName = _loginUsuario,
+                    Password = _senhaUsuario,
+                    Parameters = _claims
                 });
+
+                if (responseToken.IsError)
+                    throw new UnauthorizedAccessException();
+
+                var handler = new JwtSecurityTokenHandler();
+                var securityToken = handler.ReadToken(responseToken.AccessToken) as JwtSecurityToken;
 
                 return new Token
                 {
-                    Access = response.AccessToken
+                    Access = responseToken.AccessToken,
+                    Claims = securityToken.Payload.SerializeToJson()
                 };
             }
+
+            var response = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+            {
+                Address = disco.TokenEndpoint,
+
+                ClientId = _clienteId,
+                ClientSecret = _clienteSenha,
+                Scope = _escopo,
+            });
+
+            return new Token
+            {
+                Access = response.AccessToken
+            };
         }
     }
 }

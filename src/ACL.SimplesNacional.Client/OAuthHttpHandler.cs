@@ -13,7 +13,7 @@ namespace ACL.SimplesNacional.Client
     {
         private readonly string _clienteId;
         private readonly string _clienteSenha;
-        private readonly string _escopo = "sn, dec";
+        private readonly string _escopo = "sn dec";
         private readonly string _urlAutenticacao;
         private readonly string _loginUsuario;
         private readonly string _senhaUsuario;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ACL.SimplesNacional.Client;
 
@@ -11,8 +12,19 @@ namespace ConsoleApp
             Console.WriteLine();
             Console.WriteLine("Realizando consulta, aguarde...");
 
-            using var client = new SimplesNacionalClient("https://auth.aclti.com.br", "demo_client", "demoC@123#!");
-            var enquadramentos = await client.ObterEnquadramentos("36463545000181");
+            var claims = new Dictionary<string, string>
+            {
+                { "role" , "sn-contrib" },
+                { "name" , "Cecília Silva" },
+                { "matricula" , "123456"},
+                { "cnpjs", "32577504000165"}
+            };
+
+            var handler = new OAuthHttpHandler("demo_client", "demoC@123#!", claims, "32577504000165");
+
+
+            using var client = new SimplesNacionalClient(handler, Ambiente.Treinamento);
+            var enquadramentos = await client.ObterEnquadramentos("32577504000165");
 
             foreach (var enquadramento in enquadramentos)
             {

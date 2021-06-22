@@ -12,6 +12,7 @@ namespace ACL.SimplesNacional.Client
     public sealed class SimplesNacionalClient : IDisposable
     {
         private readonly string UrlApiFiscalizacao;
+        private readonly string UrlApiDEC;
         private readonly OAuthHttpHandler oAuthHttpHandler;
         public SimplesNacionalClient(OAuthHttpHandler oAuthHttpHandler, Ambiente ambiente = Ambiente.Producao)
         {
@@ -19,14 +20,21 @@ namespace ACL.SimplesNacional.Client
             this.UrlApiFiscalizacao = ambiente switch
             {
                 Ambiente.Producao => "https://simplesnacional.aclti.com.br/api/fiscalizacao",
-                Ambiente.Homologacao => "https://simplesnacional-homologacao.aclti.com.br/api/fiscalizacao",
+                Ambiente.Homologacao => "https://simplesnacional-homologacao-ssa.aclti.com.br/api/fiscalizacao",
                 _ => "https://simplesnacional-treinamento.aclti.com.br/api/fiscalizacao"
+            };
+
+            this.UrlApiDEC = ambiente switch
+            {
+                Ambiente.Producao => "https://decv2.aclti.com.br/api",
+                Ambiente.Homologacao => "https://decv2-homologacao.aclti.com.br/api",
+                _ => "https://decv2-treinamento.aclti.com.br/api"
             };
         }
 
-        public async Task<IEnumerable<SituacaoFical>> ObterSituacoesFiscais(IEnumerable<string> cnpjs)
+        public async Task<IEnumerable<SituacaoFiscal>> ObterSituacoesFiscais(IEnumerable<string> cnpjs)
         {
-            var resultado = new List<SituacaoFical>();
+            var resultado = new List<SituacaoFiscal>();
 
             using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
             foreach (var cnpj in cnpjs)
@@ -34,7 +42,7 @@ namespace ACL.SimplesNacional.Client
                 var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&status=1");
 
                 if (enquadramentos.Any())
-                    resultado.Add(new SituacaoFical
+                    resultado.Add(new SituacaoFiscal
                     {
                         Cnpj = cnpj,
                         Total = enquadramentos.Count()
@@ -49,6 +57,13 @@ namespace ACL.SimplesNacional.Client
             using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
             var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&tipo=4&status=1&divergente=true");
             return enquadramentos;
+        }
+
+        public async Task<IEnumerable<ResumoMensagemIntegracao>> ObterMensagensNaoLidas(string cnpj)
+        {
+            using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiDEC}/") };
+            var mensagens = await client.GetJsonAsync<IEnumerable<ResumoMensagemIntegracao>>($"mensagens/ListarMensagensIntegracao?naoLidas=true");
+            return mensagens;
         }
 
         public void Dispose()

@@ -17,18 +17,24 @@ namespace ConsoleApp
                 { "role" , "sn-contrib" },
                 { "name" , "Cecília Silva" },
                 { "matricula" , "123456"},
-                { "cnpjs", "32577504000165"}
+                { "cnpjs", "13300804000158"}
             };
 
-            var handler = new OAuthHttpHandler("demo_client", "demoC@123#!", claims, "32577504000165");
+            var handler = new OAuthHttpHandler("demo_client", "demoC@123#!", claims, "13300804000158");
 
+            using var client = new SimplesNacionalClient(handler, Ambiente.Homologacao);
+            // var enquadramentos = await client.ObterEnquadramentos("13300804000158");
 
-            using var client = new SimplesNacionalClient(handler, Ambiente.Treinamento);
-            var enquadramentos = await client.ObterEnquadramentos("32577504000165");
+            // foreach (var enquadramento in enquadramentos)
+            // {
+            //     Console.WriteLine($"Ano: {enquadramento.Ano}/Mês: {enquadramento.Mes} - Tipo: {enquadramento.Tipo} - Status: {enquadramento.Status} - Divergente: {enquadramento.Divergente}");
+            // }
 
-            foreach (var enquadramento in enquadramentos)
+            var mensagens = await client.ObterMensagensNaoLidas("13300804000158");
+
+            foreach (var mensagem in mensagens)
             {
-                Console.WriteLine($"Ano: {enquadramento.Ano}/Mês: {enquadramento.Mes} - Tipo: {enquadramento.Tipo} - Status: {enquadramento.Status} - Divergente: {enquadramento.Divergente}");
+                Console.WriteLine($"Assunto: {mensagem.Assunto} - Enviada em: {mensagem.DataEnvio} - Para: {mensagem.Para} - Lida: {(mensagem.Lida ? "Sim" : "Não")} - Leitura em: {mensagem.DataLeitura}");
             }
         }
     }

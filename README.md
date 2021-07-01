@@ -39,6 +39,7 @@ using (var client = new SimplesNacionalClient("Id", "Senha"))
     var eventos = await client.ListarEventos("CNPJ base");
     var sublimites = await client.ListarSublimites("Código TOM", 2018);
     var situacao = await client.ObterSituacaoContribuinte("CNPJ base");
+    var mensagens = await client.ObterMensagensNaoLidas("CNPJ base");
 }
 ```
 

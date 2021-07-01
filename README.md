@@ -14,6 +14,7 @@ $ dotnet add package ACL.SimplesNacional.Client --version 0.8.0
 ## Análises com potencial de cobrança
 - [X] Listagem de contribuintes que ultrapassaram sublimite estadual/nacional
 - [X] Listagem de divergências com seus respectivos valores
+- [X] Listagem de mensagens não lidas do DEC
 
 
 ## Informações do contribuinte

@@ -23,14 +23,10 @@ namespace ConsoleApp
             var handler = new OAuthHttpHandler("demo_client", "demoC@123#!", claims, "13300804000158");
 
             using var client = new SimplesNacionalClient(handler, Ambiente.Homologacao);
-            // var enquadramentos = await client.ObterEnquadramentos("13300804000158");
-
-            // foreach (var enquadramento in enquadramentos)
-            // {
-            //     Console.WriteLine($"Ano: {enquadramento.Ano}/Mês: {enquadramento.Mes} - Tipo: {enquadramento.Tipo} - Status: {enquadramento.Status} - Divergente: {enquadramento.Divergente}");
-            // }
 
             var mensagens = await client.ObterMensagensNaoLidas("13300804000158");
+            var situacoes = await client.ObterSituacoesFiscais(new List<string> { "13300804000158" });
+            var enquadramentos = await client.ObterEnquadramentos("13300804000158");
 
             foreach (var mensagem in mensagens)
             {

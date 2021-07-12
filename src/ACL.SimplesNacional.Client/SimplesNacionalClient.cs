@@ -36,7 +36,7 @@ namespace ACL.SimplesNacional.Client
         {
             var resultado = new List<SituacaoFiscal>();
 
-            using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
+            using var client = new HttpClient(oAuthHttpHandler, false) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
             foreach (var cnpj in cnpjs)
             {
                 var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&status=1");
@@ -54,14 +54,14 @@ namespace ACL.SimplesNacional.Client
 
         public async Task<IEnumerable<Enquadramento>> ObterEnquadramentos(string cnpj)
         {
-            using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
+            using var client = new HttpClient(oAuthHttpHandler, false) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
             var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&tipo=4&status=1&divergente=true");
             return enquadramentos;
         }
 
         public async Task<IEnumerable<ResumoMensagemIntegracao>> ObterMensagensNaoLidas(string cnpj)
         {
-            using var client = new HttpClient(oAuthHttpHandler) { BaseAddress = new Uri($"{UrlApiDEC}/") };
+            using var client = new HttpClient(oAuthHttpHandler, false) { BaseAddress = new Uri($"{UrlApiDEC}/") };
             var mensagens = await client.GetJsonAsync<IEnumerable<ResumoMensagemIntegracao>>($"mensagens/ListarMensagensIntegracao?naoLidas=true");
             return mensagens;
         }

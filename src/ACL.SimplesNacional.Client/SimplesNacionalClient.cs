@@ -55,7 +55,7 @@ namespace ACL.SimplesNacional.Client
         public async Task<IEnumerable<Enquadramento>> ObterEnquadramentos(string cnpj)
         {
             using var client = new HttpClient(oAuthHttpHandler, false) { BaseAddress = new Uri($"{UrlApiFiscalizacao}/") };
-            var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&tipo=4&status=1&divergente=true");
+            var enquadramentos = await client.GetJsonAsync<IEnumerable<Enquadramento>>($"potenciais/enquadramentos?cnpj={cnpj}&divergente=true");
             return enquadramentos;
         }
 

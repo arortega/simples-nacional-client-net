@@ -1,0 +1,29 @@
+###
+# @name loginSSA
+POST https://auth.aclti.com.br/connect/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+client_id=demo_client
+&client_secret=demoC@123#!
+&grant_type=password
+&username=02565657919
+&password=senha@123
+&scope=sn dec
+&role=sn-contrib
+&name=Cecília Silva
+&cnpjs=21488286000176
+
+###
+@authToken = eyJhbGciOiJSUzI1NiIsImtpZCI6IjJtd01rOFNGLXBoTG1YaDJrcVRuUkEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE2MjQzNjg5ODEsImV4cCI6MTYyNjk2MDk4MSwiaXNzIjoiaHR0cHM6Ly9hdXRoLmFjbHRpLmNvbS5iciIsImF1ZCI6InNuIiwiY2xpZW50X2lkIjoid2ViaXNzNV8zODQ5Iiwic3ViIjoiMDgwMDQwNzg2NTYiLCJhdXRoX3RpbWUiOjE2MjQzNjg5ODEsImlkcCI6ImxvY2FsIiwibmFtZSI6IkZMw4FWSUEgUk9EUklHVUVTIFBSQURPIiwicm9sZSI6InNuLWZpc2NhbCIsImFzc2luYXR1cmEiOiJodHRwOi8vbGFib3JhdG9yaW8xL0hvbW9sb2dhY2FvU2FsdmFkb3IvYXNzaW5hdHVyYS1kaWdpdGFsaXphZGEvMDgwMDQwNzg2NTYiLCJtYXRyaWN1bGEiOiIiLCJjb2R0b20iOiIzODQ5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoiMDgwMDQwNzg2NTYiLCJzY29wZSI6WyJzbiJdLCJhbXIiOlsia2JhIl19.F5nsUEsYfLKeVrN3DdJW99yyynDy705MvMVcAusVKwm3NsgktKYLDaayDLqim4evcps7K_XsyS3hbSBczNT2DPp-ABPLNJNlDm8k_563x3dfXQ1HMVGnEOALpKCzBVTDKXa7FesebEDQCyXWWYQrBYNftsW_LEwZmeohfcLD9dPWFOXfFEsowVOTp9etc5F-vTUrw2FkAhM703u6upmhlb6oBV_q_ZEFZXWAedaxUsYzzAwELQ1YeC4uOqmisg6aTlkKinKycW2tqNlH7eFaVpQYIy-ZEUTGvm8sbrirbPZDJOtBWED2BFtSbh6AoZ427biHB09cU5dqQTETbay69Q
+GET https://simplesnacional-homologacao-ssa.aclti.com.br/api/fiscalizacao/potenciais/contribuintes?optante=true&pagina=1&tipo=4
+Authorization: Bearer {{authToken}}
+
+###
+@authToken = {{loginSSA.response.body.access_token}}
+GET https://simplesnacional-homologacao-ssa.aclti.com.br/api/fiscalizacao/potenciais/enquadramentos?cnpj=21488286000176&tipo=4&status=1&divergente=true
+Authorization: Bearer {{authToken}}
+
+###
+@authToken = {{loginSSA.response.body.access_token}}
+GET https://decv2-homologacao.aclti.com.br/api/mensagens/ListarMensagensIntegracao?naoLidas=true
+Authorization: Bearer {{authToken}}
